@@ -1,45 +1,53 @@
 package repository
 
-import "github.com/gastonbordet/notification_service/internal/core/domain"
+import (
+	"fmt"
+
+	"github.com/gastonbordet/notification_service/internal/core/domain"
+)
 
 type NotificationRepositoryImple struct {
 	// DB dep
 }
 
-func (repository *NotificationRepositoryImple) GetNotificationType(notifType string) *domain.NotificationType {
+func (repository *NotificationRepositoryImple) GetNotificationType(notifType string) (*domain.NotificationType, error) {
+	// TODO retrieve entity from storage
 	types := []*domain.NotificationType{{
-		ID:        1,
-		NotifType: "status",
+		ID:   1,
+		Type: "status",
 		Limit: &domain.LimitRule{
-			AmountLimit: 2,
-			Minutes:     1,
-			Disabled:    false,
+			Rate:       2,
+			Unit:       "minutes",
+			UnitAmount: 1,
+			Enabled:    true,
 		},
 	}, {
-		ID:        1,
-		NotifType: "marketing",
+		ID:   1,
+		Type: "marketing",
 		Limit: &domain.LimitRule{
-			AmountLimit: 3,
-			Minutes:     60,
-			Disabled:    false,
+			Rate:       3,
+			Unit:       "hour",
+			UnitAmount: 1,
+			Enabled:    true,
 		},
 	}, {
-		ID:        1,
-		NotifType: "news",
+		ID:   1,
+		Type: "news",
 		Limit: &domain.LimitRule{
-			AmountLimit: 1,
-			Minutes:     1440,
-			Disabled:    false,
+			Rate:       1,
+			Unit:       "day",
+			UnitAmount: 1,
+			Enabled:    true,
 		},
 	}}
 
 	for _, nt := range types {
-		if nt.NotifType == notifType {
-			return nt
+		if nt.Type == notifType {
+			return nt, nil
 		}
 	}
 
-	return nil
+	return nil, fmt.Errorf("Notification type: %s not found", notifType)
 }
 
 func InitiNotificationRepository() *NotificationRepositoryImple {

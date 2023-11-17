@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/gastonbordet/notification_service/internal/core/domain"
 	"github.com/gastonbordet/notification_service/internal/core/port"
@@ -13,43 +13,47 @@ type NotificationServiceImpl struct {
 	eventRepository port.EventRepository
 }
 
-func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj string) {
-	notifTypeEntity := sv.notifRepository.GetNotificationType(notifType)
-	lastEvents := sv.eventRepository.GetEventsByNotifType(
-		notifType,
-		notifTypeEntity.Limit.AmountLimit,
-	)
-	counter := notifTypeEntity.Limit.AmountLimit
+func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj string) error {
+	notifTypeEntity, typeErr := sv.notifRepository.GetNotificationType(notifType)
 
-	// validate rate
-	for _, event := range lastEvents {
-		if event.Notif.NotifType.Limit.TimeExcedeed(event.Date) {
-			counter -= 1
-		}
+	// if type don't exist handle error
+	if typeErr != nil {
+		return typeErr
 	}
 
-	if counter <= 0 {
-		fmt.Println("Can't emit notification because limit is excedeed")
-		return
+	rateLimiter := &domain.RateLimiter{}
+	lastEvents := sv.eventRepository.GetEventsByNotifType(
+		notifType,
+		notifTypeEntity.Limit.Rate,
+	)
+
+	limitErr := rateLimiter.LimitNotification(notifTypeEntity, lastEvents)
+
+	// if notification limit is exceeded handle error
+	if limitErr != nil {
+		return limitErr
 	}
 
 	// build notification payload
 	notification := &domain.Notification{
-		NotifType: notifTypeEntity,
-		UserId:    userId,
-		Msj:       msj,
+		Type:   notifTypeEntity,
+		UserId: userId,
+		Msj:    msj,
 	}
 
 	// emit notification
-	sv.gateway.EmitNotification(*notification)
+	sv.gateway.EmitNotification(notification)
 
-	// store event success
+	// build event
 	newEvent := &domain.Event{
 		Notif: notification,
-		Date:  "",
+		Date:  time.Now().Format(time.RFC3339),
 	}
 
+	// store event
 	sv.eventRepository.SaveEvent(newEvent)
+
+	return nil
 }
 
 func InitNotificationService(
