@@ -11,7 +11,7 @@ type LimitRule struct {
 	Enabled    bool
 }
 
-func (rule *LimitRule) getTimeUnit() time.Duration {
+func (rule *LimitRule) GetTimeUnit() time.Duration {
 	switch rule.Unit {
 	case "second":
 		return time.Second
@@ -26,9 +26,9 @@ func (rule *LimitRule) getTimeUnit() time.Duration {
 	}
 }
 
-func (rule *LimitRule) TimeExcedeed(date string) bool {
+func (rule *LimitRule) TimeExceeded(date string, now time.Time) bool {
 	eventDate, _ := time.Parse(time.RFC3339, date)
-	now := time.Now().Add(rule.getTimeUnit() * -time.Duration(rule.UnitAmount))
+	now = now.Add(rule.GetTimeUnit() * -time.Duration(rule.UnitAmount))
 
 	return eventDate.After(now)
 }

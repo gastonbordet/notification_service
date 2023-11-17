@@ -21,7 +21,7 @@ func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj str
 		return typeErr
 	}
 
-	rateLimiter := &domain.RateLimiter{}
+	rateLimiter := domain.InitiRateLimiter()
 	lastEvents := sv.eventRepository.GetEventsByNotifType(
 		notifType,
 		notifTypeEntity.Limit.Rate,

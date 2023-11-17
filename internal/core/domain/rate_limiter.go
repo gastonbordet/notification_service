@@ -1,8 +1,13 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-type RateLimiter struct{}
+type RateLimiter struct {
+	Now func() time.Time
+}
 
 func (rl *RateLimiter) LimitNotification(notificationType *NotificationType, lastEvents []*Event) error {
 	// if rule is not enabled return
@@ -15,7 +20,7 @@ func (rl *RateLimiter) LimitNotification(notificationType *NotificationType, las
 
 	// validate rate
 	for _, event := range lastEvents {
-		if notificationType.Limit.TimeExcedeed(event.Date) {
+		if notificationType.Limit.TimeExceeded(event.Date, rl.Now()) {
 			counter++
 		}
 	}
@@ -25,4 +30,10 @@ func (rl *RateLimiter) LimitNotification(notificationType *NotificationType, las
 	}
 
 	return nil
+}
+
+func InitiRateLimiter() *RateLimiter {
+	return &RateLimiter{
+		Now: time.Now,
+	}
 }
