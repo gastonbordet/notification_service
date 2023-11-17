@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gastonbordet/notification_service/internal/core/domain"
+	"github.com/gastonbordet/notification_service/internal/core/port"
 )
 
 type NotificationRepositoryImple struct {
@@ -50,6 +51,6 @@ func (repository *NotificationRepositoryImple) GetNotificationType(notifType str
 	return nil, fmt.Errorf("Notification type: %s not found", notifType)
 }
 
-func InitiNotificationRepository() *NotificationRepositoryImple {
+func InitiNotificationRepository() port.NotificationRepository {
 	return &NotificationRepositoryImple{}
 }

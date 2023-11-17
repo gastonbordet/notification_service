@@ -60,7 +60,7 @@ func InitNotificationService(
 	gateway port.Gateway,
 	notifRepo port.NotificationRepository,
 	eventRepo port.EventRepository,
-) *NotificationServiceImpl {
+) port.Service {
 	return &NotificationServiceImpl{
 		gateway:         gateway,
 		notifRepository: notifRepo,

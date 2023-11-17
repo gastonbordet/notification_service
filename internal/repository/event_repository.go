@@ -1,6 +1,9 @@
 package repository
 
-import "github.com/gastonbordet/notification_service/internal/core/domain"
+import (
+	"github.com/gastonbordet/notification_service/internal/core/domain"
+	"github.com/gastonbordet/notification_service/internal/core/port"
+)
 
 type EventRepositoryImpl struct {
 	// DB dep
@@ -27,7 +30,7 @@ func (repository *EventRepositoryImpl) SaveEvent(event *domain.Event) error {
 	return nil
 }
 
-func InitEventRepository() *EventRepositoryImpl {
+func InitEventRepository() port.EventRepository {
 	return &EventRepositoryImpl{
 		events: []*domain.Event{{
 			Notif: &domain.Notification{
