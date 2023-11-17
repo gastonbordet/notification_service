@@ -1,7 +1,7 @@
 package domain
 
 type Notification struct {
-	NotifType string
+	NotifType *NotificationType
 	UserId    string
 	Msj       string
 }
