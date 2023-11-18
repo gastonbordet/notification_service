@@ -1,0 +1,38 @@
+@startuml
+
+entity "Notification" as e01 {
+  *ID: number <<generated>>
+  *NotificationType: NotificationType <<FK>>
+  --
+  UserId: text
+  Msj: text
+}
+
+entity "NotificationType" as e02 {
+  *ID: number <<generated>>
+  *Limit: LimitRule <<FK>>
+  --
+  *Type: text 
+}
+
+entity "LimitRule" as e03 {
+  *ID: number <<generated>>
+  --
+  Rate: number
+  Unit: text
+  UnitAmount: number
+  Enabled: bool 
+}
+
+entity "Event" as e04 {
+  *ID: number <<generated>>
+  *Notif: Notification <<FK>>
+  --
+  Date: string
+}
+
+e01 ||----|| e02
+e02 ||----|| e03
+e04 ||----|| e01
+
+@enduml
