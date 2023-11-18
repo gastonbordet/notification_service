@@ -9,40 +9,12 @@ import (
 
 type NotificationRepositoryImple struct {
 	// DB dep
+	Types []*domain.NotificationType
 }
 
 func (repository *NotificationRepositoryImple) GetNotificationType(notifType string) (*domain.NotificationType, error) {
 	// TODO retrieve entity from storage
-	types := []*domain.NotificationType{{
-		ID:   1,
-		Type: "status",
-		Limit: &domain.LimitRule{
-			Rate:       2,
-			Unit:       "minutes",
-			UnitAmount: 1,
-			Enabled:    true,
-		},
-	}, {
-		ID:   1,
-		Type: "marketing",
-		Limit: &domain.LimitRule{
-			Rate:       3,
-			Unit:       "hour",
-			UnitAmount: 1,
-			Enabled:    true,
-		},
-	}, {
-		ID:   1,
-		Type: "news",
-		Limit: &domain.LimitRule{
-			Rate:       1,
-			Unit:       "day",
-			UnitAmount: 1,
-			Enabled:    true,
-		},
-	}}
-
-	for _, nt := range types {
+	for _, nt := range repository.Types {
 		if nt.Type == notifType {
 			return nt, nil
 		}
@@ -52,5 +24,34 @@ func (repository *NotificationRepositoryImple) GetNotificationType(notifType str
 }
 
 func InitiNotificationRepository() port.NotificationRepository {
-	return &NotificationRepositoryImple{}
+	return &NotificationRepositoryImple{
+		Types: []*domain.NotificationType{{
+			ID:   1,
+			Type: "status",
+			Limit: &domain.LimitRule{
+				Rate:       2,
+				Unit:       "minutes",
+				UnitAmount: 1,
+				Enabled:    true,
+			},
+		}, {
+			ID:   1,
+			Type: "marketing",
+			Limit: &domain.LimitRule{
+				Rate:       3,
+				Unit:       "hour",
+				UnitAmount: 1,
+				Enabled:    true,
+			},
+		}, {
+			ID:   1,
+			Type: "news",
+			Limit: &domain.LimitRule{
+				Rate:       1,
+				Unit:       "day",
+				UnitAmount: 1,
+				Enabled:    true,
+			},
+		}},
+	}
 }

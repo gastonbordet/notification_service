@@ -7,7 +7,7 @@ import (
 
 type EventRepositoryImpl struct {
 	// DB dep
-	events []*domain.Event
+	Events []*domain.Event
 }
 
 func (repository *EventRepositoryImpl) GetEventsByNotifType(notifType string, amount int) []*domain.Event {
@@ -15,24 +15,28 @@ func (repository *EventRepositoryImpl) GetEventsByNotifType(notifType string, am
 	var events []*domain.Event
 	limit := 0
 
-	for _, event := range repository.events {
-		if event.Notif.Type.Type == notifType && limit <= amount {
+	// iterate backwards to get last events persisted
+	for i := len(repository.Events); i >= 1; i-- {
+		event := repository.Events[i-1]
+		if event.Notif.Type.Type == notifType && limit < amount {
 			events = append(events, event)
 			limit++
 		}
 	}
+
 	return events
 }
 
 func (repository *EventRepositoryImpl) SaveEvent(event *domain.Event) error {
 	// Persist event in DB or return error
-	repository.events = append(repository.events, event)
+	repository.Events = append(repository.Events, event)
+
 	return nil
 }
 
 func InitEventRepository() port.EventRepository {
 	return &EventRepositoryImpl{
-		events: []*domain.Event{{
+		Events: []*domain.Event{{
 			Notif: &domain.Notification{
 				Type: &domain.NotificationType{
 					ID:   1,
