@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/gastonbordet/notification_service/internal/core/service"
 	"github.com/gastonbordet/notification_service/internal/gateway"
 	"github.com/gastonbordet/notification_service/internal/repository"
@@ -10,7 +12,8 @@ func main() {
 	gateway := gateway.InitGateway()
 	notifRepo := repository.InitiNotificationRepository()
 	eventRepo := repository.InitEventRepository()
-	service := service.InitNotificationService(gateway, notifRepo, eventRepo)
+	rateLimiter := service.InitiRateLimiter(time.Now)
+	service := service.InitNotificationService(gateway, notifRepo, eventRepo, rateLimiter)
 
 	service.Send("status", "user", "incomplete")
 	service.Send("status", "user", "incomplete")

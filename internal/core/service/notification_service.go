@@ -11,6 +11,7 @@ type NotificationServiceImpl struct {
 	gateway         port.Gateway
 	notifRepository port.NotificationRepository
 	eventRepository port.EventRepository
+	rateLimiter     port.RateLimiter
 }
 
 func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj string) error {
@@ -21,13 +22,12 @@ func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj str
 		return typeErr
 	}
 
-	rateLimiter := domain.InitiRateLimiter()
 	lastEvents := sv.eventRepository.GetEventsByNotifType(
 		notifType,
 		notifTypeEntity.Limit.Rate,
 	)
 
-	limitErr := rateLimiter.LimitNotification(notifTypeEntity, lastEvents)
+	limitErr := sv.rateLimiter.LimitNotification(notifTypeEntity, lastEvents)
 
 	// if notification limit is exceeded handle error
 	if limitErr != nil {
@@ -60,10 +60,12 @@ func InitNotificationService(
 	gateway port.Gateway,
 	notifRepo port.NotificationRepository,
 	eventRepo port.EventRepository,
+	rateLimiter port.RateLimiter,
 ) port.Service {
 	return &NotificationServiceImpl{
 		gateway:         gateway,
 		notifRepository: notifRepo,
 		eventRepository: eventRepo,
+		rateLimiter:     rateLimiter,
 	}
 }

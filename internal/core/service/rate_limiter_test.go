@@ -1,10 +1,11 @@
-package domain_test
+package service_test
 
 import (
 	"testing"
 	"time"
 
 	"github.com/gastonbordet/notification_service/internal/core/domain"
+	"github.com/gastonbordet/notification_service/internal/core/service"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +17,7 @@ func TestLimitNotification_ShouldNotLimitNotification_When_LimitIsNotEnabled(t *
 		},
 	}
 	lastEvents := []*domain.Event{}
-	rateLimiter := new(domain.RateLimiter)
+	rateLimiter := new(service.RateLimiter)
 
 	// Act
 	result := rateLimiter.LimitNotification(notificationType, lastEvents)
@@ -51,7 +52,7 @@ func TestLimitNotification_ShouldNotLimitNotification_When_LimitIsNotExceeded(t 
 		},
 		Date: "2023-11-16T18:00:06-03:00",
 	}}
-	rateLimiter := new(domain.RateLimiter)
+	rateLimiter := new(service.RateLimiter)
 	rateLimiter.Now = func() time.Time {
 		now, _ := time.Parse(time.RFC3339, "2023-11-16T21:01:06-03:00")
 		return now
@@ -89,7 +90,7 @@ func TestLimitNotification_ShouldLimitNotification_When_LimitIsExceeded(t *testi
 		},
 		Date: "2023-11-16T21:00:03-03:00",
 	}}
-	rateLimiter := new(domain.RateLimiter)
+	rateLimiter := new(service.RateLimiter)
 	rateLimiter.Now = func() time.Time {
 		now, _ := time.Parse(time.RFC3339, "2023-11-16T21:01:06-03:00")
 		return now

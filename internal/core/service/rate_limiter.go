@@ -1,15 +1,17 @@
-package domain
+package service
 
 import (
 	"fmt"
 	"time"
+
+	"github.com/gastonbordet/notification_service/internal/core/domain"
 )
 
 type RateLimiter struct {
 	Now func() time.Time
 }
 
-func (rl *RateLimiter) LimitNotification(notificationType *NotificationType, lastEvents []*Event) error {
+func (rl *RateLimiter) LimitNotification(notificationType *domain.NotificationType, lastEvents []*domain.Event) error {
 	// if rule is not enabled return
 	if !notificationType.Limit.Enabled {
 		return nil
@@ -32,8 +34,8 @@ func (rl *RateLimiter) LimitNotification(notificationType *NotificationType, las
 	return nil
 }
 
-func InitiRateLimiter() *RateLimiter {
+func InitiRateLimiter(n func() time.Time) *RateLimiter {
 	return &RateLimiter{
-		Now: time.Now,
+		Now: n,
 	}
 }
