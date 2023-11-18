@@ -39,14 +39,14 @@ func TestLimitNotification_ShouldNotLimitNotification_When_LimitIsNotExceeded(t 
 	}
 	lastEvents := []*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: "status",
 			},
 		},
 		Date: "2023-11-16T21:00:06-03:00",
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: "status",
 			},
 		},
@@ -77,14 +77,14 @@ func TestLimitNotification_ShouldLimitNotification_When_LimitIsExceeded(t *testi
 	}
 	lastEvents := []*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: "status",
 			},
 		},
 		Date: "2023-11-16T21:00:06-03:00",
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: "status",
 			},
 		},

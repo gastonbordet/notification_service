@@ -18,7 +18,7 @@ func (repository *EventRepositoryImpl) GetEventsByNotifType(notifType string, am
 	// iterate backwards to get last events persisted
 	for i := len(repository.Events); i >= 1; i-- {
 		event := repository.Events[i-1]
-		if event.Notif.Type.Type == notifType && limit < amount {
+		if event.Notif.NotificationType.Type == notifType && limit < amount {
 			events = append(events, event)
 			limit++
 		}
@@ -38,7 +38,7 @@ func InitEventRepository() port.EventRepository {
 	return &EventRepositoryImpl{
 		Events: []*domain.Event{{
 			Notif: &domain.Notification{
-				Type: &domain.NotificationType{
+				NotificationType: &domain.NotificationType{
 					ID:   1,
 					Type: "status",
 				},
@@ -46,7 +46,7 @@ func InitEventRepository() port.EventRepository {
 			Date: "2023-11-16T21:02:06-03:00",
 		}, {
 			Notif: &domain.Notification{
-				Type: &domain.NotificationType{
+				NotificationType: &domain.NotificationType{
 					ID:   1,
 					Type: "news",
 				},
