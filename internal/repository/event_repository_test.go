@@ -14,25 +14,25 @@ func TestGetEventsByNotifType_ShouldReturnLast2Events_WhenExist(t *testing.T) {
 	limitAmount := 2
 	persistedEvents := []*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
@@ -54,25 +54,25 @@ func TestSaveEvent_ShouldSaveEvent(t *testing.T) {
 	expectedEventsAmount := 5
 	persistedEvents := []*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
 	}, {
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
@@ -83,7 +83,7 @@ func TestSaveEvent_ShouldSaveEvent(t *testing.T) {
 
 	newEvent := &domain.Event{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},

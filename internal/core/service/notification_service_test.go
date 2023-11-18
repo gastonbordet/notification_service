@@ -143,7 +143,7 @@ func TestSend_ShouldReturnErr_WhenLimitExceeded(t *testing.T) {
 	mockNotificationRepository.On("GetNotificationType").Return(mockNotificationType, nil)
 	mockEventRepository.On("GetEventsByNotifType").Return([]*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},
@@ -184,7 +184,7 @@ func TestSend_ShouldEmitNotificationAndSaveEvent(t *testing.T) {
 	mockNotificationRepository.On("GetNotificationType").Return(mockNotificationType, nil)
 	mockEventRepository.On("GetEventsByNotifType").Return([]*domain.Event{{
 		Notif: &domain.Notification{
-			Type: &domain.NotificationType{
+			NotificationType: &domain.NotificationType{
 				Type: notifType,
 			},
 		},

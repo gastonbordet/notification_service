@@ -11,7 +11,7 @@ type GatewayClient struct{}
 
 func (gc *GatewayClient) EmitNotification(notification *domain.Notification) {
 	fmt.Println(
-		fmt.Sprintf("notification emited - type: %s msj: %s", notification.Type.Type, notification.Msj),
+		fmt.Sprintf("notification emited - type: %s msj: %s", notification.NotificationType.Type, notification.Msj),
 	)
 }
 

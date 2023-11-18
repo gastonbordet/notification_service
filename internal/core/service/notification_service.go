@@ -36,9 +36,9 @@ func (sv *NotificationServiceImpl) Send(notifType string, userId string, msj str
 
 	// build notification payload
 	notification := &domain.Notification{
-		Type:   notifTypeEntity,
-		UserId: userId,
-		Msj:    msj,
+		NotificationType: notifTypeEntity,
+		UserId:           userId,
+		Msj:              msj,
 	}
 
 	// emit notification
